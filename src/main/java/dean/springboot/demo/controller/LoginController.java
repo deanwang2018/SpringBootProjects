@@ -1,9 +1,11 @@
 package dean.springboot.demo.controller;
 
+import dean.springboot.demo.common.ServiceException;
 import dean.springboot.demo.dto.LoginDto;
 import dean.springboot.demo.service.LoginService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 @Api(tags = "测试管理平台-用户登录 springboot demo")
 @RestController
 @RequestMapping("demo")
+@Slf4j
 public class LoginController {
 
     @Autowired
@@ -25,6 +28,10 @@ public class LoginController {
     public String Login(@RequestBody LoginDto loginDto) {
 //        System.out.println("用户: " + loginDto.getUserName() + " 登录了！");
 //        System.out.println("密码：" + loginDto.getPwd());
+
+        if(loginDto.getUserName().contains("error")){
+            ServiceException.throwEx("用户名中含有error");
+        }
         return "登录成功!" + loginService.Login(loginDto) + ", key: " + demoKey1;
     }
 
